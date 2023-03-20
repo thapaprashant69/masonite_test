@@ -1,0 +1,12 @@
+<form action="/blog/{{blog.id}}/update" method="POST">
+    {{ csrf_field }}
+
+    <label> Title </label>
+    <input type="name" name="title" value="{{blog.title}}"><br>
+
+    <label> Description </label>
+    <textarea name="description">{{blog.description}}</textarea><br>
+
+    <input type="submit" value="Update">
+    <a href="/blog/{{blog.id}}/delete">Delete</a>
+</form>
