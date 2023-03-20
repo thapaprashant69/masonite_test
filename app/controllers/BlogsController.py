@@ -3,10 +3,16 @@ from masonite.views import View
 from masonite.request import Request
 from app.models.Post import Post
 from masoniteorm.query import QueryBuilder
+builder = QueryBuilder(model=Post)
+# print(dir(builder))
 
 
 class BlogsController(Controller):
-    def show(self, view: View):
+    def show(self, view: View, request: Request):
+        blogs = Post.all()
+        return view.render("homepage",{"blogs":blogs,"user":request.user()})
+    
+    def create(self, view: View):
         return view.render("blog")
     
     def single(self, view: View,request: Request):
@@ -53,5 +59,8 @@ class BlogsController(Controller):
         # posts_count = QueryBuilder(table="users").group_by('post')
         # posts_count = QueryBuilder(table="posts").sum('author_id').group_by('author_id').count()
         # posts_count = QueryBuilder(table="posts").count("author_id").group_by('author_id').get(['author_id'])
-        posts_count = QueryBuilder(table="posts").group_by_raw('COUNT("author_id")').get()
+        # posts_count = QueryBuilder(table="posts").group_by_raw('COUNT("author_id")').get()
+        # posts_count = builder.table("users").select_raw("author_id","COUNT('author_id') as count").group_by('author_id').get()
+        posts_count = builder.statement("SELECT author_id,COUNT(*) as count FROM posts GROUP BY author_id;")
+        
         return posts_count

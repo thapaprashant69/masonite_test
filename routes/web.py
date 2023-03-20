@@ -1,8 +1,11 @@
 from masonite.routes import Route
 from masonite.authentication import Auth
 
-ROUTES = [Route.get("/", "WelcomeController@show"),
-          Route.get("/blog", "BlogsController@show"),
+ROUTES = [
+            # Route.get("/", "WelcomeController@show"),
+        #   Route.get("/blog", "BlogsController@show"),
+          Route.get("/", "BlogsController@show"),
+          Route.get("/blog/create", "BlogsController@create"),
           Route.post("/blog/create", "BlogsController@store"),
           Route.get("/blog/@slug/item","BlogsController@single"),
           Route.get("/blog/author/@author_id", "BlogsController@allposts"),

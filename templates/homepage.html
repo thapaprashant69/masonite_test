@@ -1,0 +1,38 @@
+<style type="text/css">
+    a:link,a:visited,a:hover,a:active{
+        color:black;
+        text-decoration:none;
+        background-color:transparent;
+    }
+
+    .button {
+        font: bold 11px Arial;
+        text-decoration: none;
+        background-color: #EEEEEE;
+        color: #333333;
+        padding: 2px 6px 2px 6px;
+        border-top: 1px solid #CCCCCC;
+        border-right: 1px solid #333333;
+        border-bottom: 1px solid #333333;
+        border-left: 1px solid #CCCCCC;
+    }
+</style>
+
+User's name:{{user.name}}<br/><br/>
+<a href="/blog/create" class="button">Add Blog</a>
+<a href="/blog/count" class="button">Get Blog Count</a><br>
+
+<hr/>
+@for blog in blogs
+<a href="/blog/{{blog.slug}}/item">
+  "{{blog.title}}" by {{blog.author.name}}
+  <br /><br />
+  {{blog.description}}
+  <br />
+  <a href="/blog/{{blog.id}}/edit" class="button">Edit</a>
+  <a href="/blog/{{blog.id}}/delete" class="button">Delete</a>
+  <hr />
+</a>
+@endfor
+
+
