@@ -9,7 +9,11 @@ builder = QueryBuilder(model=Post)
 
 class BlogsController(Controller):
     def show(self, view: View, request: Request):
-        blogs = Post.all()
+        user = request.user()
+        if user.is_admin:
+            blogs = Post.all()
+        else:
+            blogs = Post.where("author_id",user.id).get()
         return view.render("homepage",{"blogs":blogs,"user":request.user()})
     
     def create(self, view: View):
@@ -61,6 +65,7 @@ class BlogsController(Controller):
         # posts_count = QueryBuilder(table="posts").count("author_id").group_by('author_id').get(['author_id'])
         # posts_count = QueryBuilder(table="posts").group_by_raw('COUNT("author_id")').get()
         # posts_count = builder.table("users").select_raw("author_id","COUNT('author_id') as count").group_by('author_id').get()
-        posts_count = builder.statement("SELECT author_id,COUNT(*) as count FROM posts GROUP BY author_id;")
+        # posts_count = builder.statement("SELECT author_id,COUNT(*) as count FROM posts GROUP BY author_id;")
+        posts_count = builder.statement("SELECT users.name, users.email, COUNT(posts.author_id) FROM users LEFT JOIN posts ON users.id = posts.author_id GROUP BY users.id;")
         
         return posts_count

@@ -12,6 +12,7 @@ class CreateUsersTable(Migration):
             table.string("second_password").nullable()
             table.string("remember_token").nullable()
             table.string("phone").nullable()
+            table.boolean("is_admin").default('False')
             table.timestamp("verified_at").nullable()
             table.timestamps()
             table.soft_deletes()
