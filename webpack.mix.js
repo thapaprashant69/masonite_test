@@ -7,8 +7,8 @@ const path = require('path')
 
 mix.js('resources/js/app.js', 'storage/compiled/js')
   .postCss('resources/css/app.css', 'storage/compiled/css', [
-    //
-  ])
+    require("tailwindcss"),
+  ]).vue();
 
 // ensure root directory of mix is project root
 mix.setPublicPath(".")

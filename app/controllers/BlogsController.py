@@ -4,6 +4,7 @@ from masonite.request import Request
 from app.models.Post import Post
 from masoniteorm.query import QueryBuilder
 builder = QueryBuilder(model=Post)
+import pickle
 # print(dir(builder))
 
 
@@ -33,7 +34,7 @@ class BlogsController(Controller):
             count = Post.last().id+1
         except:
             count = 1
-        Post.create(
+        post = Post.create(
             title = request.input('title'),
             description = request.input('description'),
             author_id = request.user().id,
@@ -41,23 +42,29 @@ class BlogsController(Controller):
             # slug = Post.generate_unique_slug(request.input('title'))
         )
         
-        return 'post created'
+        return post.serialize()
     
     def editblog(self, view: View, request : Request):
         blog = Post.find(request.param("id"))
         return view.render("editblog",{"blog":blog})
     
     def update(self, view: View, request : Request):
+        print(request.param("id"))
         post = Post.find(request.param("id"))
         post.title = request.input('title')
         post.description = request.input('description')
         post.save()
-        return "Blog updated"
+        return {"data": post.serialize()}
     
     def delete(self, view: View, request : Request):
+        user = request.user()
         post = Post.find(request.param("id"))
+        if user.id == post.author_id:
+            post.delete()
+            return {"data": post.serialize()}
+        else:
+            return "You are not owner so not allowed to delete this post"
         post.delete()
-        return 'post deleted'
         
     def getcount(self,request:Request):
         # posts_count = QueryBuilder(table="users").group_by('post')
