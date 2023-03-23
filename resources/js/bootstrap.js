@@ -62,6 +62,12 @@ app.component("add-blog", {
         })
         .then((response) => {
             console.log("Blog created successfully")
+            this.title = ''
+            this.description = ''
+            this.isVisible = false
+            if (window.alert("Post created successfully")) {
+              window.location.reload();
+            }
         })
         .catch((error) => {
             console.error(error);

@@ -4,18 +4,21 @@ from masonite.request import Request
 from app.models.Post import Post
 from masoniteorm.query import QueryBuilder
 builder = QueryBuilder(model=Post)
-import pickle
+from masonite.response import Response
 # print(dir(builder))
 
 
 class BlogsController(Controller):
-    def show(self, view: View, request: Request):
-        user = request.user()
-        if user.is_admin:
-            blogs = Post.all()
+    def show(self, view: View, request: Request, response: Response):
+        if request.user():
+            user = request.user()
+            if user.is_admin:
+                blogs = Post.all()
+            else:
+                blogs = Post.where("author_id",user.id).get()
+            return view.render("homepage",{"blogs":blogs,"user":request.user()})
         else:
-            blogs = Post.where("author_id",user.id).get()
-        return view.render("homepage",{"blogs":blogs,"user":request.user()})
+            return view.render("auth.login")
     
     def create(self, view: View):
         return view.render("blog")

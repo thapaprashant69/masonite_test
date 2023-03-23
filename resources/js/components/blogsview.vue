@@ -19,7 +19,10 @@
         },
         methods:{
             deleteBlog(blogId){
-                this.blogs = this.blogs.filter((blog) => blog.id !== blogId);
+                // this.blogs = this.blogs.filter((blog) => blog.id !== blogId);
+                if (window.alert("Post deleted successfully")) {
+                    window.location.reload();
+                }
             },
             updateBlog(blog){
                 axios.post(`/blog/${blog.blogId}/update`,{
@@ -28,14 +31,14 @@
                 })
                 .then(response =>{
                     const updatedBlog = response.data.data;
-                    console.log(updatedBlog);
-                    console.log(this.blogs)
                     const index = this.blogs.findIndex(blog => blog.id === updatedBlog.id);
-                    console.log(index);
                     if (index !== -1) {
                         this.blogs[index] = updatedBlog;
-                        console.log(this.blogs)
-                        this.$set(this,'blogs',this.blogs);
+                    
+                        if (window.alert("Post edited successfully")) {
+                            window.location.reload();
+                        }
+                        // this.$set(this,'blogs',this.blogs);
                         // this.setState({blogs: this.blogs});
                         // this.forceUpdate();
                     }
